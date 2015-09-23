@@ -10,7 +10,7 @@ define('MY_APP_PATH', dirname(__FILE__));
 define('MY_CONTROLLER_NAME', 'c');
 define('MY_METHOD_NAME', 'm');
 define('MY_CONTROLLER_DIR', MY_APP_PATH . '\controller');
-
+define('METHO_SUFFFIX', 'Action');
 $germination = new Mygermination($url);
 $germination->run();
 
@@ -65,20 +65,16 @@ class Mygermination {
 		$controller = $this->getController();
 		return $controller . 'Controller.class.php';
 	}
+	public function formatAction() {
+		return $this->getMethod() . METHO_SUFFFIX;
+	}
 	
 	public function run() {
-		// echo "<pre>";
-		// var_dump($this->getController() , '-' , $this->getMethod(),'+',$this->getParameter());
-		//echo MY_CONTROLLER_DIR . '\\' . $this->formatController();
 		$fileName = MY_CONTROLLER_DIR . '\\' . $this->formatController();
-		// echo $fileName;
-		//require CONTROLLER_DIR . '\' . $this->formatController();
 		require_once $fileName;
 		$className = ucfirst($this->getController());
 		$currenctClass = new $className;
-		$actionName = $this->getMethod() . 'Action()';
-		var_dump($actionName);
-		//$currenctClass->defaultAction();
-		//$currenctClass->
+		$actionName = $this->formatAction();
+		call_user_func(array($currenctClass , $actionName));
 	}
 }
